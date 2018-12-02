@@ -12,111 +12,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonUtils {
-
     static JSONObject jsonObject;
     static JSONArray jsonArrayalsoKnownAs;
     static JSONArray jsoningredients;
     static JSONObject nameObject;
+    private static final String JSON_KEY_NAME = "name";
+    private static final String JSON_KEY_MAINNAME = "mainName";
+    private static final String JSON_KEY_PLACEOFORIGIN = "placeOfOrigin";
+    private static final String JSON_KEY_DESC = "description";
+    private static final String JSON_KEY_IMAGE = "image";
+    private static final String JSON_KEY_ALSOKNOWNAS = "alsoKnownAs";
+    private static final String JSON_KEY_INGREDIENTS = "ingredients";
 
     public static Sandwich parseSandwichJson(String json) {
-
-        String mainName="";
-        List<String> alsoKnownAs=new ArrayList<>();
-        String placeOfOrigin="";
-        String description="";
-        String image=null;
-        List<String> ingredients=new ArrayList<>();
-
-
+        String mainName = "";
+        List<String> alsoKnownAs = new ArrayList<>();
+        String placeOfOrigin = "";
+        String description = "";
+        String image = null;
+        List<String> ingredients = new ArrayList<>();
         try {
             jsonObject = new JSONObject(json);
-        } catch (JSONException e) {
-            Log.d("JsonUtil","Parsing error");
-            e.printStackTrace();
-        }
-        try {
-            nameObject = jsonObject.getJSONObject("name");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            if(nameObject.has("mainName") && !nameObject.getString("mainName").isEmpty()){
-
-                mainName = nameObject.getString("mainName");
-                mainName = mainName.replaceAll("\n"," ");
+            nameObject = jsonObject.getJSONObject(JSON_KEY_NAME);
+            if (nameObject.has(JSON_KEY_MAINNAME) && !nameObject.getString(JSON_KEY_MAINNAME).isEmpty()) {
+                mainName = nameObject.getString(JSON_KEY_MAINNAME);
+                mainName = mainName.replaceAll("\n", " ");
             }
-        } catch (JSONException e) {
-            Log.d("JsonUtil","No Sandwitch Name");
-            e.printStackTrace();
-        }
-        try {
-            if(jsonObject.has("placeOfOrigin") && !jsonObject.getString("placeOfOrigin").isEmpty()){
-                placeOfOrigin = jsonObject.getString("placeOfOrigin");
+            if (jsonObject.has(JSON_KEY_PLACEOFORIGIN) && !jsonObject.getString(JSON_KEY_PLACEOFORIGIN).isEmpty()) {
+                placeOfOrigin = jsonObject.getString(JSON_KEY_PLACEOFORIGIN);
             }
-        } catch (JSONException e) {
-            Log.d("JsonUtil","No placeOforigin Name");
-            e.printStackTrace();
-        }
-
-        try {
-            if(jsonObject.has("description") && !jsonObject.getString("description").isEmpty()){
-                description = jsonObject.getString("placeOfOrigin");
+            if (jsonObject.has(JSON_KEY_DESC) && !jsonObject.getString(JSON_KEY_DESC).isEmpty()) {
+                description = jsonObject.getString(JSON_KEY_DESC);
             }
-        } catch (JSONException e) {
-            Log.d("JsonUtil","No description in Json Data");
-            e.printStackTrace();
-        }
-
-        try {
-            if(jsonObject.has("image") && !jsonObject.getString("image").isEmpty()){
-                image = jsonObject.getString("image");
+            if (jsonObject.has(JSON_KEY_IMAGE) && !jsonObject.getString(JSON_KEY_IMAGE).isEmpty()) {
+                image = jsonObject.getString(JSON_KEY_IMAGE);
             }
-        } catch (JSONException e) {
-            Log.d("JsonUtil","No image in Json Data");
-            e.printStackTrace();
-        }
-
-        try {
-            if(nameObject.has("alsoKnownAs")) {
-                jsonArrayalsoKnownAs = nameObject.getJSONArray("alsoKnownAs");
+            if (nameObject.has(JSON_KEY_ALSOKNOWNAS)) {
+                jsonArrayalsoKnownAs = nameObject.getJSONArray(JSON_KEY_ALSOKNOWNAS);
             }
-        } catch (JSONException e) {
-            Log.d("JsonUtil","No jsonArrayalsoKnownAs Json Data");
-            e.printStackTrace();
-        }
-        if(jsonArrayalsoKnownAs.length() != 0){
-
-            for (int i = 0; i< jsonArrayalsoKnownAs.length();i++){
-                try {
+            if (jsonArrayalsoKnownAs.length() != 0) {
+                for (int i = 0; i < jsonArrayalsoKnownAs.length(); i++) {
                     String alsoKnowas = (String) jsonArrayalsoKnownAs.get(i);
                     alsoKnownAs.add(alsoKnowas);
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
-
-        }
-
-        try {
-            jsoningredients = jsonObject.getJSONArray("ingredients");
-        } catch (JSONException e) {
-            Log.d("JsonUtil","No jsoningredients Json Data");
-            e.printStackTrace();
-        }
-        if(jsoningredients.length() != 0){
-
-            for (int i = 0; i< jsoningredients.length();i++){
-                try {
-
+            jsoningredients = jsonObject.getJSONArray(JSON_KEY_INGREDIENTS);
+            if (jsoningredients.length() != 0) {
+                for (int i = 0; i < jsoningredients.length(); i++) {
                     String getJsonIngredients = (String) jsoningredients.get(i);
                     ingredients.add(getJsonIngredients);
-                } catch (JSONException e) {
-                    Log.d("JsonUtil","No index in jsoningredients Json Data");
-                    e.printStackTrace();
                 }
             }
-
+        } catch (Exception e) {
+            Log.d("JsonUtils", e.toString());
         }
-        return new Sandwich(mainName,alsoKnownAs,placeOfOrigin,description,image,ingredients);
+        return new Sandwich(mainName, alsoKnownAs, placeOfOrigin, description, image, ingredients);
     }
 }
