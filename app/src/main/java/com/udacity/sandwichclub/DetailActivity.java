@@ -16,6 +16,7 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
+    private static final String DATA_NOT_AVAILABLE = "Data not available";
     private static final int DEFAULT_POSITION = -1;
     TextView originTextView;
     TextView descriptionTextView;
@@ -88,13 +89,13 @@ public class DetailActivity extends AppCompatActivity {
         if (!sandwich.getDescription().isEmpty()) {
             descriptionTextView.setText(sandwich.getDescription());
         } else {
-            descriptionTextView.setText("Data not available");
+            descriptionTextView.setText(DATA_NOT_AVAILABLE);
         }
 
         if (!sandwich.getPlaceOfOrigin().isEmpty()) {
             originTextView.setText(sandwich.getPlaceOfOrigin());
         } else {
-            originTextView.setText("Data not available");
+            originTextView.setText(DATA_NOT_AVAILABLE);
         }
 
         if (!sandwich.getAlsoKnownAs().isEmpty()) {
@@ -109,7 +110,7 @@ public class DetailActivity extends AppCompatActivity {
             String listToString = TextUtils.join("\n", sandwich.getIngredients());
             ingredientsTextView.setText(listToString);
         } else {
-            ingredientsTextView.setText("Data not avilable");
+            ingredientsTextView.setText(DATA_NOT_AVAILABLE);
         }
 
     }
