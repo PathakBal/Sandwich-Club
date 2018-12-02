@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,15 +45,14 @@ public class DetailActivity extends AppCompatActivity {
         // hide error text initialy
 
 
-
         int position = intent.getIntExtra(EXTRA_POSITION, DEFAULT_POSITION);
         if (position == DEFAULT_POSITION) {
             // EXTRA_POSITION not found in intent
-            Log.d("Balendra","Inside position check");
+            Log.d("Balendra", "Inside position check");
             closeOnError();
             return;
-        }else {
-            Log.d("Balendra","outside position check");
+        } else {
+            Log.d("Balendra", "outside position check");
         }
 
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
@@ -60,7 +60,7 @@ public class DetailActivity extends AppCompatActivity {
         // get json string and retrun sandwitch object
         Sandwich sandwich = JsonUtils.parseSandwichJson(json);
         // print out if we got all data from click
-        Log.d("JsonUtil",sandwich.getDescription()+":"+sandwich.getImage()+":"+sandwich.getMainName()+":"+sandwich.getPlaceOfOrigin()+":"+sandwich.getIngredients().toString());
+        Log.d("JsonUtil", sandwich.getDescription() + ":" + sandwich.getImage() + ":" + sandwich.getMainName() + ":" + sandwich.getPlaceOfOrigin() + ":" + sandwich.getIngredients().toString());
         if (sandwich == null) {
             // Sandwich data unavailable
             closeOnError();
@@ -70,6 +70,8 @@ public class DetailActivity extends AppCompatActivity {
         populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher_round)
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
@@ -81,21 +83,34 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-//    public void setTitle(String title) {
-//        titleTextView.setText(title);
-//    }
 
     private void populateUI(Sandwich sandwich) {
+        if (!sandwich.getDescription().isEmpty()) {
+            descriptionTextView.setText(sandwich.getDescription());
+        } else {
+            descriptionTextView.setText("Data not available");
+        }
 
-        descriptionTextView.setText(sandwich.getDescription());
-        originTextView.setText(sandwich.getPlaceOfOrigin());
-        for (String alsoknownas:sandwich.getAlsoKnownAs()
-             ) {
-            alsoKnownAsTextView.append(alsoknownas+"\n");
+        if (!sandwich.getPlaceOfOrigin().isEmpty()) {
+            originTextView.setText(sandwich.getPlaceOfOrigin());
+        } else {
+            originTextView.setText("Data not available");
         }
-        for (String ingred:sandwich.getIngredients()
-             ) {
-            ingredientsTextView.append(ingred+"\n");
+
+        if (!sandwich.getAlsoKnownAs().isEmpty()) {
+            String listToString = TextUtils.join("\n", sandwich.getAlsoKnownAs());
+            alsoKnownAsTextView.setText(listToString);
+
+        } else {
+            alsoKnownAsTextView.setText("Data not avilable");
         }
+
+        if (!sandwich.getIngredients().isEmpty()) {
+            String listToString = TextUtils.join("\n", sandwich.getIngredients());
+            ingredientsTextView.setText(listToString);
+        } else {
+            ingredientsTextView.setText("Data not avilable");
+        }
+
     }
 }
