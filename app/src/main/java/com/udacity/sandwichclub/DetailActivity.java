@@ -102,7 +102,7 @@ public class DetailActivity extends AppCompatActivity {
             alsoKnownAsTextView.setText(listToString);
 
         } else {
-            alsoKnownAsTextView.setText("Data not avilable");
+            alsoKnownAsTextView.setText(DATA_NOT_AVAILABLE;
         }
 
         if (!sandwich.getIngredients().isEmpty()) {
